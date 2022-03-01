@@ -176,7 +176,7 @@ export default class SEOreport {
             }
         }
 
-        let rankings = answer.map((e) => {
+        let rankings = answer.map( e => {
             if (e.url === "") {
                 e.url = "no url";
                 e.position = ">100";

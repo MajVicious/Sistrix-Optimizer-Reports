@@ -25,7 +25,7 @@ async function exec(){
         let crawls = await report.getCrawls()
         console.log(`Crawls fetched for ${proj.name}`)
 
-        let {answer: rankings} = await report.getRankings()
+        let rankings = await report.getAllRankings()
         console.log(`Rankings fetched for ${proj.name}`)
 
         let overview = await report.getCrawlHistory()
