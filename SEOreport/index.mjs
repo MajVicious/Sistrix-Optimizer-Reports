@@ -8,7 +8,7 @@ export default class SEOreport {
         this.project = project;
     }
 
-    static key = "XmGbKW98C97FA5MkGTwEBWufjIZNvVJZ";
+    static key = process.env.API_KEY;
     static visibility = "https://api.sistrix.com/optimizer.visibility";
     static issues = "https://api.sistrix.com/optimizer.onpage.crawl";
     static overview = "https://api.sistrix.com/optimizer.onpage.overview";
