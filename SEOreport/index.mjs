@@ -18,6 +18,7 @@ export default class SEOreport {
     static projects = "https://api.sistrix.com/optimizer.projects";
 
     static async makeCsv(obj, name) {
+    // checks if a directory 'out' does exist, if not -> create the directory
         const dir = "./out";
 
         try {
@@ -31,6 +32,7 @@ export default class SEOreport {
     }
 
     static async generateMondays(n) {
+    // generates dates for past mondays since the sistrix api usually updates visiblity on mondays
         let dates = [];
 
         // get last Monday
@@ -51,7 +53,7 @@ export default class SEOreport {
     }
 
     static async getProjects() {
-        // get list of all optimizer projects with keys and names
+    // get list of all optimizer projects with keys and names
         let url = `${SEOreport.projects}?api_key=${SEOreport.key}&format=json`;
         let json = await SEOreport.getJsonFromApi(url);
         let answer = json.answer[0]["optimizer.project"];
@@ -59,6 +61,7 @@ export default class SEOreport {
     }
 
     static async getJsonFromApi(url) {
+    // executes api calls
         try {
             const response = await axios.get(url);            
             // console.log(response)
@@ -70,6 +73,7 @@ export default class SEOreport {
     }
 
     async getVisibility(date) {
+    // gets visiblity inlcuding competitors for a certain date
         let dateString = date ? `&date=${date}` : "";
         let url = `${SEOreport.visibility}?api_key=${SEOreport.key}&project=${this.project}&format=json&competitors=true${dateString}`;
         let res_json = await SEOreport.getJsonFromApi(url);
@@ -81,6 +85,7 @@ export default class SEOreport {
     }
 
     async getVisibilityFromDates(num_dates) {
+    // gets visiblity for a numebr of dates
         let data = [];
         let dateStrings = await SEOreport.generateMondays(num_dates);
         for (let date of dateStrings) {
@@ -97,6 +102,7 @@ export default class SEOreport {
     }
 
     async getCrawlDates() {
+    // gets avaialble crawls from the api
         let url = `${SEOreport.overview}?api_key=${SEOreport.key}&project=${this.project}&format=json`;
         let res_json = await SEOreport.getJsonFromApi(url);
         let answer = res_json.answer[0]["optimizer.onpage.overview"];
@@ -105,6 +111,7 @@ export default class SEOreport {
     }
 
     async getCrawl(date = null) {
+    // get the most recent crawl issues or get crawl issues for a specific date
         let dateString = date ? `&date=${date}` : "";
         let url = `${SEOreport.issues}?api_key=${SEOreport.key}&project=${this.project}${dateString}&format=json`;
         let res_json = await SEOreport.getJsonFromApi(url);
@@ -125,6 +132,7 @@ export default class SEOreport {
     }
 
     async getCrawls() {
+    // gets all available issues for all available crawls
         let crawls = [];
         let dates = await this.getCrawlDates();
         for (let date of dates) {
@@ -140,6 +148,7 @@ export default class SEOreport {
     }
 
     async getCrawlHistory() {
+    // get the crawl overview (no specific issues) form the api
         let url = `${SEOreport.overview}?api_key=${SEOreport.key}&project=${this.project}&format=json`;
         let res_json = await SEOreport.getJsonFromApi(url);
         let answer = res_json.answer[0]["optimizer.onpage.overview"];
@@ -147,6 +156,7 @@ export default class SEOreport {
     }
 
     async getRankings(offset) {
+    // gets rankins from the rank tracker. Accepts an offset for pagination.
         let offsetString = offset ? `&offset=${offset}` : "";
         let url = `${SEOreport.keywords}?api_key=${SEOreport.key}&project=${this.project}&format=json${offsetString}`;
         let res_json = await SEOreport.getJsonFromApi(url);
@@ -164,6 +174,7 @@ export default class SEOreport {
     }
 
     async getAllRankings() {
+    // checks of getRankings is paginated and loops over the pagination to get all keywords.
         let { answer, count } = await this.getRankings();
 
         if (count >= 100) {
@@ -193,6 +204,7 @@ export default class SEOreport {
     }
 
     async getKeywords() {
+    // returns all available keywords
         let rankings = await this.getAllRankings();
         let keywords = rankings.map((e) => e.keyword);
         return keywords;
