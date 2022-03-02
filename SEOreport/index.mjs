@@ -1,7 +1,9 @@
-import fetch from "node-fetch";
+import axios from 'axios';
 import ObjectsToCsv from "objects-to-csv";
 import { access, mkdir } from "fs/promises";
 import { constants } from "fs";
+
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 export default class SEOreport {
     constructor(project) {
@@ -58,9 +60,10 @@ export default class SEOreport {
 
     static async getJsonFromApi(url) {
         try {
-            const response = await fetch(url);
-            let json = await response.json();
-            return json;
+            const response = await axios.get(url);            
+            // console.log(response)
+            await delay(1500)
+            return response.data;
         } catch (error) {
             console.log(error);
         }
