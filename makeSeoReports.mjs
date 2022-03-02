@@ -2,9 +2,6 @@
 import SEOreport from './SEOreport/index.mjs'
 
 // iterate over projects & generate data
-
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
-
 async function exec(){
     let projects = await SEOreport.getProjects()
     let inactiveProjects = ["KTqxfedTXmGHCuXA", "NhzfBbbxLTkuWG8N", "nCJxwpS2BRFUrCJN", "JeqTHyFMCSqCf2La"]
@@ -39,8 +36,6 @@ async function exec(){
 
         console.log(`Finished with ${proj.name}`)
         console.log('------------------------')
-        await delay(2000)
-        
     }
 
     console.log('All reports successfully generated.')
